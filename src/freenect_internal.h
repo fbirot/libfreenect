@@ -82,6 +82,17 @@ void fn_log(freenect_context *ctx, freenect_loglevel level, const char *fmt, ...
 #define PID_NUI_CAMERA 0x02ae
 #define PID_NUI_MOTOR 0x02b0
 
+#ifdef HAVE_BIG_ENDIAN
+#define UINT16_CPU_TO_KINECT(X) (X << 8 | X  >> 8)
+#define UINT32_CPU_TO_KINECT(X) (X << 24 | (X & 0x0000ff00) << 8 | (X & 0x00ff0000) >> 8 | X >> 24)
+#else
+#define UINT16_CPU_TO_KINECT(X) X
+#define UINT16_KINECT_TO_CPU(X) X
+#endif
+
+#define UINT16_KINECT_TO_CPU UINT16_CPU_TO_KINECT
+#define UINT32_KINECT_TO_CPU UINT32_CPU_TO_KINECT
+
 typedef struct {
 	int running;
 	uint8_t flag;
